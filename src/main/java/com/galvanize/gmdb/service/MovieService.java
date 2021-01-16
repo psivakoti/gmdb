@@ -1,12 +1,17 @@
 package com.galvanize.gmdb.service;
 
+
+import com.galvanize.gmdb.exception.MovieNotFoundException;
 import com.galvanize.gmdb.model.MovieDto;
 import com.galvanize.gmdb.model.MovieEntity;
 import com.galvanize.gmdb.repository.MovieRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+
+
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -28,5 +33,17 @@ public class MovieService {
 
     public void addMovie(MovieDto movieDto) {
         movieRepository.save(new MovieEntity(movieDto.getTitle(),movieDto.getDirector(),movieDto.getActors(),movieDto.getRelease(),movieDto.getDescription(),movieDto.getRating()));
+    }
+
+    public MovieDto findAMovie(String title) throws MovieNotFoundException {
+        Optional<MovieEntity> movieEntity = movieRepository.findById(title);
+        Optional<MovieDto> movieDto = movieEntity.map(movie ->new MovieDto(movie.getTitle(), movie.getDirector(), movie.getActors(), movie.getRelease(), movie.getDescription(),movie.getRating()));
+        if(movieDto.isPresent()){
+            return movieDto.get();
+        }
+        else{
+           throw new MovieNotFoundException();
+        }
+
     }
 }

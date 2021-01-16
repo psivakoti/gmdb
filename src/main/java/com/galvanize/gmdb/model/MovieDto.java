@@ -1,7 +1,8 @@
 package com.galvanize.gmdb.model;
 
-import lombok.*;
 
+import lombok.AllArgsConstructor;
+import lombok.Value;
 
 @Value
 @AllArgsConstructor

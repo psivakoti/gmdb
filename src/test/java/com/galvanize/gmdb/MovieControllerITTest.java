@@ -15,6 +15,7 @@ import javax.transaction.Transactional;
 import static org.hamcrest.Matchers.hasSize;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -56,6 +57,34 @@ public class MovieControllerITTest {
                 .andExpect(jsonPath("$[0].description").value("Earth's mightiest heroes must come together and learn to fight as a team if they are going to stop the mischievous Loki and his alien army from enslaving humanity."))
                 .andExpect(jsonPath("$[0].rating").value(IsNull.nullValue()));
 
+    }
+
+    @Test
+    public void testFindAMovieExist() throws Exception {
+
+        MovieDto movieDto = new MovieDto("The Avengers","Joss Whedon","Robert Downey Jr., Chris Evans, Mark Ruffalo, Chris Hemsworth","2012","Earth's mightiest heroes must come together and learn to fight as a team if they are going to stop the mischievous Loki and his alien army from enslaving humanity.",null);
+        mockMvc.perform(post("/movies")
+                .content(objectMapper.writeValueAsString(movieDto))
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isCreated());
+
+        mockMvc.perform(get("/movies/{title}" , "The Avengers"))
+                .andExpect(status().isFound())
+                .andExpect(jsonPath("$.title").value("The Avengers"))
+                .andExpect(jsonPath("$.director").value("Joss Whedon"))
+                .andExpect(jsonPath("$.actors").value("Robert Downey Jr., Chris Evans, Mark Ruffalo, Chris Hemsworth"))
+                .andExpect(jsonPath("$.release").value("2012"))
+                .andExpect(jsonPath("$.description").value("Earth's mightiest heroes must come together and learn to fight as a team if they are going to stop the mischievous Loki and his alien army from enslaving humanity."))
+                .andExpect(jsonPath("$.rating").value(IsNull.nullValue()));
+
+    }
+
+    @Test
+    public void testFindAMovieDoesNotExist() throws Exception {
+
+        mockMvc.perform(get("/movies/{title}" , "The Avengers"))
+                .andExpect(status().isNotFound())
+                .andExpect(content().string("Movie not found"));
     }
 
 }
