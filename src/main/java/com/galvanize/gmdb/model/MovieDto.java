@@ -1,8 +1,10 @@
 package com.galvanize.gmdb.model;
 
-import lombok.Value;
+import lombok.*;
+
 
 @Value
+@AllArgsConstructor
 public class MovieDto {
 
     String title;
@@ -11,5 +13,6 @@ public class MovieDto {
     String release;
     String description;
     Integer rating;
+
 
 }
