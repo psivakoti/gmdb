@@ -1,0 +1,2 @@
+com/galvanize/gmdb/GmdbApplicationTests.java
+ com.galvanize.gmdb.GmdbApplicationTests
