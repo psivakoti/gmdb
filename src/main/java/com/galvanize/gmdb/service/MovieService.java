@@ -1,6 +1,7 @@
 package com.galvanize.gmdb.service;
 
 import com.galvanize.gmdb.model.MovieDto;
+import com.galvanize.gmdb.model.MovieEntity;
 import com.galvanize.gmdb.repository.MovieRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,5 +24,9 @@ public class MovieService {
                 .stream()
                 .map(movieEntity -> new MovieDto(movieEntity.getTitle(), movieEntity.getDirector(), movieEntity.getActors(), movieEntity.getRelease(), movieEntity.getDescription(),movieEntity.getRating() ))
                 .collect(Collectors.toList());
+    }
+
+    public void addMovie(MovieDto movieDto) {
+        movieRepository.save(new MovieEntity(movieDto.getTitle(),movieDto.getDirector(),movieDto.getActors(),movieDto.getRelease(),movieDto.getDescription(),movieDto.getRating()));
     }
 }

@@ -2,8 +2,8 @@ package com.galvanize.gmdb.controllers;
 
 import com.galvanize.gmdb.model.MovieDto;
 import com.galvanize.gmdb.service.MovieService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,5 +20,11 @@ public class MovieController {
     public List<MovieDto> findAllMovies() {
 
         return movieService.findAllMovies();
+    }
+
+    @PostMapping("/movies")
+    @ResponseStatus(HttpStatus.CREATED)
+    public void addMovie(@RequestBody MovieDto movieDto){
+        movieService.addMovie(movieDto);
     }
 }
